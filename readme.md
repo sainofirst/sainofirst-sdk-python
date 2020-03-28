@@ -1,6 +1,6 @@
 # Sainofirst SDK (Python)
 
-The Sainofirst SDK for python provides a python API for Sainofirst services. You can use the python API to build libraries or applications for python. 
+The Sainofirst SDK for python provides a python API for Sainofirst communication services. You can use the python API to build libraries or applications for python. 
 
 Using the SDK for python makes it possible to realize a number of compelling use cases. their are several things you can build by using the SDK for python.
 
