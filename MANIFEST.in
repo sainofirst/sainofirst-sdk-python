@@ -9,4 +9,4 @@ include *.json
 include LICENSE
 
 # Include tests
-recursive-include tests *
+graft tests

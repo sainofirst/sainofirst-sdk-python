@@ -1,11 +1,11 @@
 # Sainofirst SDK (Python)
 
-The Sainofirst SDK for python provides a python API for Sainofirst communication services. You can use the python API to build libraries or applications for python. 
+The Sainofirst SDK for python provides a python API for Sainofirst services. You can use the python API to build libraries or applications for python. 
 
 Using the SDK for python makes it possible to realize a number of compelling use cases. their are several things you can build by using the SDK for python.
 
 
-## 1) Setting Up the SDK for Python
+## Setting Up the SDK for Python
 
 ### Installing the SDK
 
@@ -29,10 +29,10 @@ This will install the Sainofirst SDK into your python project.
 After you install the SDK, you can load the Sainofirst SDK in your python application using import. 
 
 ```py
-from Sainofirst import Sainofirst
+from sainofirst import Sainofirst
 ```
 
-## 2) Configure Your Credentials
+## Configure Your Credentials
 
 You need to provide credentials to Sainofirst SDK so that only your account and its resources are accessed by the SDK. For more information about obtaining your account credentials, see [Getting Your Credentials](https://apidocs.sainofirst.com/authentication-api-key). 
 
@@ -51,7 +51,7 @@ Alternatively if you prefer you can set your credentials directly in code (NOT R
 sf = Sainofirst("YOUR API KEY")
 ```
 
-## 3) Working with Sainofirst SDK
+## Working with Sainofirst SDK
 
 The Sainofirst SDK for python provides access to services that it supports through a collection of service instances. Each supported Sainofirst service offer low-level APIs for using service features and resources.
 
@@ -72,7 +72,7 @@ importing the SDK for python as shown previously includes the entire SDK into yo
 
 
 ```py
-from Sainofirst import Sainofirst
+from sainofirst import Sainofirst
 ```
 
 Begin by creating an instance of the Sainofirst SDK and assign it to a variable.
@@ -93,7 +93,7 @@ sms = sf.sms
 To access individual service begin by importing that service
 
 ```py
-from Sainofirst.services.sms import Sms
+from sainofirst.services.sms import Sms
 ```
 creating an instance of the service and assign it to a variable.
 
@@ -120,7 +120,7 @@ Sainofirst sms service provides easy api for sending and scheduling text message
 Begin by loading Sainofirst SDK into your python project.
 
 ```py
-from Sainofirst import Sainofirst
+from sainofirst import Sainofirst
 ```
 
 Create a new instance of Sainofirst SDK. Make sure you have configured your apikey in environment variable.
@@ -138,7 +138,7 @@ sms = sf.sms
 Alternatively if you do not want to load whole sdk you can also access individual services. To access individual service begin by importing that service
 
 ```py
-from Sainofirst.services.sms import Sms
+from sainofirst.services.sms import Sms
 ```
 Create an instance of the service and assign it to a variable. Make sure you have configured your apikey in environment variable.
 
@@ -278,6 +278,7 @@ requestDictionary = (
 ## Alternate way to use sms service using send method 
 
 Additional options `number` and `message` are required while sending request dictionary directly using send method
+
 | option     | type | description |
 | ------    | -------- | -------- |
 | number     | `List[String]`   | List of number with country prefix. (multiple numbers can be separated by comma.)  |
@@ -298,9 +299,11 @@ sms.send({
 ### Schedule a message 
 
 Schedule a message by using additional configuration option `time`
+
 | option | type | description |
 | ------  |-------- | -------- |
 | time      | `String` | Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent  |
+
 ```py
 sms.send({
     "senderid" : "SAIFST", 
@@ -366,7 +369,7 @@ Sainofirst voice service provides easy api for making and scheduling phone calls
 Begin by loading Sainofirst SDK into your python project.
 
 ```py
-from Sainofirst import Sainofirst
+from sainofirst import Sainofirst
 ```
 
 Create a new instance of Sainofirst SDK. Make sure you have configured your apikey in environment variable.
@@ -384,7 +387,7 @@ voice = sf.voice
 Alternatively if you do not want to load whole sdk you can also access individual services. To access individual service begin by importing that service
 
 ```py
-from Sainofirst.services.voice import Voice
+from sainofirst.services.voice import Voice
 ```
 Create an instance of the service and assign it to a variable. Make sure you have configured your apikey in environment variable.
 
@@ -424,7 +427,7 @@ If you want to make text synthesized voice call you will be required to configur
 | option     | type | description |
 | ------     | -------- | -------- |
 |speech_rate |`Number` | minimum 0.5 - maximum 2 (Lower the value, Slower the speed of voice audio converted via text-to-speech synthesis ) |
-|language_id  | `Number`| Language ID of the text to be converted via Text-to-Speech synthesis. 
+|language_id  | `Number`| Language ID of the text to be converted via Text-to-Speech synthesis. |
 
 ```py
 (
@@ -483,7 +486,7 @@ If you want to reschedule an already scheduled voice call use `reschedule` metho
 | ------    | -------- | -------- |
 | voice_id  | `Number`|Unique ID which was received in response while sending the voice call.|
 | new_send_at  | `String` | Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent|
-|timezone | `String` | timezone refers to the local time of a region or a country
+|timezone | `String` | timezone refers to the local time of a region or a country |
 
 ```py
 voice.reschedule({
@@ -516,14 +519,14 @@ The `config` option is used to make a advanced voice call. It further has two op
 | option     | type | description |
 | ------     | -------- | -------- |
 |repeat  | `Number` | Value must be a single digit number. On press of this number key, the call will be repeated.|
-|callTransfer| `Dict` | Use to configure call transfer
+|callTransfer| `Dict` | Use to configure call transfer |
 
 `callTransfer` is used to do a call transfer on press of a key. It has two option
 
 | option     | type | description |
-| ------    | -------- | -------- | -------- |
+| ------     | -------- | -------- |
 |transferKey  | `Number` | On press of this key, call will be forwarded.|
-|transferNumber| `Number` | Number on which call to be forwarded.
+|transferNumber| `Number` | Number on which call to be forwarded. |
 
 ### Advanced audio call
 
@@ -617,7 +620,7 @@ Use `audio_file_url` option to provide audio file url while making an audio call
 
 | option     | type | description |
 | ------     | -------- | -------- |
-|audio_file_url|`String`|URL of audio file that will be played on voice call.
+|audio_file_url|`String`|URL of audio file that will be played on voice call. |
 
 ```py
 voice.send({
@@ -636,7 +639,7 @@ To make a text synthesized voice call you will be required to provide following 
 | ------     | -------- | -------- |
 |  text      | `String` | The actual text that would be converted to voice by Text-to-Speech synthesis and will be played over Voice call.|
 |speech_rate |`Number` | minimum 0.5 - maximum 2 (Lower the value, Slower the speed of voice audio converted via text-to-speech synthesis ) |
-|language_id  | `Number`| Language ID of the text to be converted via Text-to-Speech synthesis. 
+|language_id  | `Number`| Language ID of the text to be converted via Text-to-Speech synthesis. |
 
 ```py
 voice.send({
@@ -645,7 +648,7 @@ voice.send({
     "subscription_id" : 26236,
     "maxLengthOfCall" : 14, 
     "text" : "your text message here", 
-    "speech_rate" : 4, 
+    "speech_rate" : 1, 
     "language_id" : 0
 },callback)
 ```
@@ -655,8 +658,8 @@ voice.send({
 If you want to schedule a voice call set `send_at` to time at which you want to schedule a call and you will also be required to provide a `timezone`
 | option     | type | description |
 | ------    | -------- | -------- |
-|send_at  | `String` | Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent
-|timezone | `String` | timezone refers to the local time of a region or a country
+|send_at  | `String` | Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent |
+|timezone | `String` | timezone refers to the local time of a region or a country |
 
 #### Scheduling audio call
 ```py
@@ -692,14 +695,14 @@ The `config` option is used to make a advanced voice call. It has two properties
 | option    | type | description |
 | ------     | -------- | -------- |
 |repeat  | `Number` | Value must be a single digit number. On press of this number key, the call will be repeated.|
-|callTransfer| `Dict` | Use to configure call transfer
+|callTransfer| `Dict` | Use to configure call transfer|
 
 `callTransfer` is used to do a call transfer on press of a key. It has two properties
 
 | option    | type | description |
 | ------     | -------- | -------- |
 |transferKey | `Number` | On press of this key, call will be forwarded.|
-|transferNumber| `Number` | Number on which call to be forwarded.
+|transferNumber| `Number` | Number on which call to be forwarded.|
 
 #### Advanced audio call
 ```py
@@ -726,7 +729,7 @@ voice.send({
     "numbers" : ["8699xxxxxx", "9435xxxxxx"]
     "subscription_id" : 26236,
     "maxLengthOfCall" : 14,  
-    "speech_rate" : 4, 
+    "speech_rate" : 1, 
     "language_id" : 0,
     "config" : { 
                 "repeat" : 0,

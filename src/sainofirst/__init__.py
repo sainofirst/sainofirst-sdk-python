@@ -2,13 +2,16 @@ import os
 import json
 
 # sms service
-from services.sms import Sms
+from sainofirst.services.sms import Sms
 
 # voice service
-from services.voice import Voice
+from sainofirst.services.voice import Voice
+
+fileDir = os.path.dirname(__file__)
+
 
 # opens errors.json file and parse it into python dictionary
-with open('errors.json') as errors:
+with open(os.path.join(fileDir, 'errors.json')) as errors:
     # errors dictionary
     errors = json.load(errors)
 
@@ -30,7 +33,7 @@ class Sainofirst:
         """
 
         # if environment variable is set it will have that value if not then it will have api key provided via constructor
-        self.__apiKey = os.environ.get('SAINOFIRST_API_KEY') or apiKey 
+        self.__apiKey =   apiKey or os.environ.get('SAINOFIRST_API_KEY')
 
         # sms service instance
         self.sms = Sms(self.__apiKey)

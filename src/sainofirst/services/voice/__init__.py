@@ -6,15 +6,18 @@ import re
 # pylint: disable=W0612
 from datetime import datetime
 
+fileDir = os.path.dirname(__file__)
+
 # opens config.json file and parse it into python dictionary
-with open('././config.json') as config:
+with open(os.path.join(fileDir, '../../config.json')) as config:
     # config dictionary
     config = json.load(config)
 
 # opens errors.json file and parse it into python dictionary
-with open('././errors.json') as errors:
+with open(os.path.join(fileDir, '../../errors.json')) as errors:
     # errors dictionary
      errors = json.load(errors)
+
 
 class Voice:
 
@@ -35,7 +38,7 @@ class Voice:
         """
 
         # if environment variable is set it will have that value if not then it will have api key provided via constructor
-        self.__apiKey = os.environ.get('SAINOFIRST_API_KEY') or apiKey 
+        self.__apiKey = apiKey or os.environ.get('SAINOFIRST_API_KEY')
 
         # holds request data
         self.__requestData = {}
