@@ -20,7 +20,7 @@ cd your_project_directory
 Then simply type the following into a terminal window
 
 ```bash
-pip3 install Sainofirst 
+pip3 install sainofirst 
 ```
 This will install the Sainofirst SDK into your python project.
 
