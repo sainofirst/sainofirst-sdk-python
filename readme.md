@@ -1,4 +1,4 @@
-# Sainofirst SDK (Python)
+# Sainofirst SDK 
 
 The Sainofirst SDK for python provides a python API for Sainofirst services. You can use the python API to build libraries or applications for python. 
 
@@ -192,9 +192,11 @@ Use schedule method to schedule your text message
 ## Sending a message in any language
 
 If you want to send text message in any language you will have to configure an additional option `unicode` to 1
+
+
 | option     | type | description |
-| ------    | -------- | -------- |
-| unicode    | `Number` | Message can be send in any language ( Values 1 or 0 )  |
+| ---------- | -------- | -------- |
+| unicode    | `Number` | Message can be send in any language ( Values 1 or 0 )|
 
 
 ```py
@@ -212,8 +214,9 @@ If you want to send text message in any language you will have to configure an a
 ## Sending a flash message
 
 If you want send a flash message set additional option `flash` to 1
+
 | option     | type | description |
-| ------     | -------- | -------- |
+| --------     | -------- | -------- |
 | flash      | `Number` | Send flash SMS( Values 1 or 0 )  |
 
 
@@ -317,6 +320,7 @@ sms.send({
 ### Sending a message in any language
 
 If you want to send text message in any language you will have to configure an additional option `unicode` to 1
+
 | option     | type | description |
 | ------    | -------- | -------- |
 | unicode    | `Number` | Message can be send in any language ( Values 1 or 0 )  |
@@ -334,6 +338,7 @@ sms.send({
 ### Sending a flash message
 
 If you want send a flash message set additional option `flash` to 1
+
 | option    | type | description |
 | ------    | -------- | -------- |
 | flash      | `Number` | Send flash SMS( Values 1 or 0 )  |
@@ -357,6 +362,7 @@ Programmatically send voice calls and build conversations anywhere and everywher
 Sainofirst voice service provides easy api for making and scheduling phone calls which you can easily integrate in your python applications.
 
 ### Required configuration options for voice service
+
 | option    | type | description |
 | ------    | -------- | -------- |
 |subscription_id|`Number`|Pricing and Routes will be based on this ID. The value of this ID can be accessed from the SainoFirst's Application under connectivity. If subscription not assigned please contact your account manager. |
@@ -656,12 +662,14 @@ voice.send({
 
 ### Scheduling a voice call
 If you want to schedule a voice call set `send_at` to time at which you want to schedule a call and you will also be required to provide a `timezone`
+
 | option     | type | description |
 | ------    | -------- | -------- |
 |send_at  | `String` | Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent |
 |timezone | `String` | timezone refers to the local time of a region or a country |
 
 #### Scheduling audio call
+
 ```py
 voice.send({
     "is_text" : False,
@@ -673,7 +681,9 @@ voice.send({
     "timezone" : "Asia/Kolkata (GMT +05:30)"
 },callback)
 ```
+
 #### Scheduling text synthesized voice call
+
 ```py
 voice.send({
     "is_text" : True,
@@ -705,6 +715,7 @@ The `config` option is used to make a advanced voice call. It has two properties
 |transferNumber| `Number` | Number on which call to be forwarded.|
 
 #### Advanced audio call
+
 ```py
 voice.send({
     "is_text" : False,
@@ -722,6 +733,7 @@ voice.send({
 },callback)
 ```
 #### Advanced text synthesized voice call
+
 ```py
 voice.send({
     "is_text" : True,

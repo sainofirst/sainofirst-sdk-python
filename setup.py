@@ -7,7 +7,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name='sainofirst',
-    version='1.0.0',
+    version='1.0.1',
     author="Sainofirst",
     author_email = 'contact@sainofirst.com',
     maintainer='Shubz Kothekar',
@@ -27,7 +27,6 @@ setuptools.setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'Topic :: Software Development :: SDK',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
@@ -39,7 +38,8 @@ setuptools.setup(
         'sainofirst': ['config.json', 'errors.json', 'services'],
     },
     include_package_data=True,
-    project_urls={    
+    project_urls={   
+        'documentation' : 'https://sainofirst.github.io/sainofirst-sdk-python', 
         'website': 'https://www.sainofirst.com',
         'source' : "https://github.com/sainofirst/sainofirst-sdk-python"
     },
