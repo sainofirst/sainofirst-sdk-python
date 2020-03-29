@@ -105,6 +105,57 @@ class Sms:
         return self
         
     
+    def schedule(self,time): 
+        """ 
+        
+        Schedules a text message
+    
+        Parameters: 
+            time (string): 
+                Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent
+    
+        """  
+
+        # adds time to request dictionary
+        self.__requestData = {**self.__requestData,"time":time}
+
+        return self
+    
+   
+    def numbers(self,numbers) :
+        """ 
+        
+        Set the list of  numbers for sms to be send to
+    
+        Parameters: 
+            numbers (list[string]): 
+                list of numbers you want your SMS to be delivered to
+    
+        """
+
+        # adds number to request dictionary
+        self.__requestData= {**self.__requestData, "number":numbers}
+
+        return self
+
+    
+    def message(self,message) :
+        """ 
+
+        Set text body for the sms
+    
+        Parameters: 
+            message (string): 
+                text content of SMS
+
+        """
+
+        # adds message to request dictionary
+        self.__requestData= {**self.__requestData, "message":message}
+
+        return self
+    
+
     def send(self, *args):
 
         """
@@ -146,7 +197,7 @@ class Sms:
        
         # send to server
         res = self.__http.post(url = config['baseURL'] + config['endpoints']['bulk-sms'],headers={'Authorization' : self.__apiKey}, json = self.__requestData) 
-        
+        self.__requestData = {}
         if callbackExist:
             res = res.json()
             if res["status"] == False :
@@ -154,7 +205,7 @@ class Sms:
             if res["status"] == True :
                 callback(res, None)
               
-           
+    
     def __validate(self):
 
         """
@@ -208,9 +259,9 @@ class Sms:
         if "flash" in self.__requestData and type( self.__requestData["flash"]).__name__ != "int" :
             raise Exception(errors['SFT011'])
         
-        if "unicode" in self.__requestData and self.__requestData["unicode"]!= "0" and self.__requestData["unicode"]!= "1" :
+        if "unicode" in self.__requestData and self.__requestData["unicode"]!= 0 and self.__requestData["unicode"]!= 1 :
             raise Exception(errors['SFT010'])
-        if "flash" in self.__requestData and self.__requestData["flash"]!= "0" and self.__requestData["flash"]!= "1" :
+        if "flash" in self.__requestData and self.__requestData["flash"]!= 0 and self.__requestData["flash"]!= 1 :
             raise Exception(errors['SFT011'])
 
         if "time" in self.__requestData  : 
@@ -220,60 +271,6 @@ class Sms:
                  raise Exception(errors['SFT013'])
             if not re.match("[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]", self.__requestData["time"] ) : 
                 raise Exception(errors['SFV011'])
-   
-    
-    def schedule(self,time): 
-        """ 
-        
-        Schedules a text message
-    
-        Parameters: 
-            time (string): 
-                Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the SMS has to be sent
-    
-        """  
-
-        # adds time to request dictionary
-        self.__requestData = {**self.__requestData,"time":time}
-
-        return self
-    
-   
-    def numbers(self,numbers) :
-        """ 
-        
-        Set the list of  numbers for sms to be send to
-    
-        Parameters: 
-            numbers (list[string]): 
-                list of numbers you want your SMS to be delivered to
-    
-        """
-
-        # adds number to request dictionary
-        self.__requestData= {**self.__requestData, "number":numbers}
-
-        return self
-
-    
-    def message(self,message) :
-        """ 
-
-        Set text body for the sms
-    
-        Parameters: 
-            message (string): 
-                text content of SMS
-
-        """
-
-        # adds message to request dictionary
-        self.__requestData= {**self.__requestData, "message":message}
-
-        return self
-    
-
-  
     
        
     

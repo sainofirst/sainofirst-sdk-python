@@ -7,15 +7,14 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name='sainofirst',
-    version='1.0.1',
+    version='1.0.2',
     author="Sainofirst",
     author_email = 'contact@sainofirst.com',
     maintainer='Shubz Kothekar',
-    maintainer_email='hello@shubzkothekar.com',
     description="The Sainofirst SDK for python provides a python API for Sainofirst communication services.",
     long_description=open("readme.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/sainofirst/sainofirst-sdk-python",
+    url="https://www.sainofirst.com",
     package_dir={'': 'src'},
     packages=['sainofirst', 'sainofirst.services.sms', 'sainofirst.services.voice'],
     keywords='sdk bulk-sms bulk-voice sms-gateway voice-call',
@@ -41,7 +40,8 @@ setuptools.setup(
     project_urls={   
         'documentation' : 'https://sainofirst.github.io/sainofirst-sdk-python', 
         'website': 'https://www.sainofirst.com',
-        'source' : "https://github.com/sainofirst/sainofirst-sdk-python"
+        'source' : "https://github.com/sainofirst/sainofirst-sdk-python",
+        'tracker': 'https://github.com/sainofirst/sainofirst-sdk-python/issues',
     },
     zip_safe=False
  )

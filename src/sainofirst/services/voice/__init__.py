@@ -56,8 +56,7 @@ class Voice:
 
         # raise if apiKey is empty str
         if self.__apiKey.strip() == "" :  raise Exception(errors["SFV002"])
-
-    
+ 
     def get(self):
         """
         Returns request dictionary from voice service
@@ -65,57 +64,6 @@ class Voice:
         """
         print(self.__requestData)
          
-   
-    def send(self, *args):
-
-        """
-        Sends voice call
-        """
-
-        callbackExist = False
-        optionExist = False
-        
-        #Check if the arguments exist
-        if len(args) != 0 :
-
-            if type(args[0]).__name__ == 'dict':
-                options = args[0]
-                optionExist = True
-                self.__requestData = {**self.__requestData,**options}
-            
-            if type(args[-1]).__name__ == 'function':
-                callback = args[-1]
-                callbackExist = True
-
-            #Exceptions
-            if len(args) == 1:
-                if type(args[0]).__name__ != 'function' and type(args[0]).__name__ != 'dict':
-                    raise Exception(errors["SFT004"])
-            
-            if len(args) == 2:
-                if type(args[0]).__name__ != 'dict':
-                    raise Exception(errors["SFT002"])
-                if type(args[-1]).__name__ != 'function':
-                    raise Exception(errors["SFT003"])
-            
-            if len(args) > 2:
-                raise Exception(errors["SFT005"])
-        
-
-        # validate response data
-        self.__validate()
-       
-        # send to server
-        res = self.__http.post(url = config['baseURL'] + config['endpoints']['bulk-voice'], headers={'Authorization' : self.__apiKey}, json = self.__requestData) 
-        
-        if callbackExist:
-            res = res.json()
-            if res["status"] == False :
-                callback(None, res)
-            if res["status"] == True :
-                callback(res, None) 
-
-    
     def set(self, options):
         """
 
@@ -177,8 +125,201 @@ class Voice:
 
 
         return self
+ 
+    def text(self,text):
+        """
+        Makes text synthesized call
 
+        Paramters:
+            text (string):
+                text to be synthesized for voice call
+        """
+        self.__requestData = {**self.__requestData,"text":text, "is_text":True}
+        return self
+  
+    def audio(self,url):
+        """
+        Makes audio call
+
+        Paramters:
+            url (string):
+                url of the audio file
+        """
+        self.__requestData = {**self.__requestData,"audio_file_url":url, "is_text":False}
+        return self
+  
+    def numbers(self,numbers) :
+        """ 
+        
+        Set the list of  numbers for making a voice call
     
+        Parameters: 
+            numbers (list[string]): 
+                list of numbers you want your voice call to be delivered to
+    
+        """
+        self.__requestData= {**self.__requestData, "numbers":numbers}
+        return self 
+
+    def schedule(self,time, timezone):   
+        """ 
+        
+        Schedules a voice call
+    
+        Parameters: 
+            time (string): 
+                Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the voice call
+            timezone (string):
+                timezone for the time
+    
+        """ 
+        self.__requestData = {**self.__requestData,"time":time, "timezone":timezone}
+        return self
+    
+    def reschedule(self, option, callback = None):
+        """
+
+        Reschedules voice call
+
+        Parameters:
+            option (dict): 
+                Dictionary with rescheduling information
+            callback (function): Optional
+                function to be executed after recieving response 
+
+        Required options: 
+            voice_id:
+                voice id of the scheduled call
+            new_send_at:
+                new time to schedule a call
+            timezone:
+                timezone for time
+                
+
+
+        """
+        if type(option).__name__ != "dict":
+            raise Exception(errors['SFT002'])
+
+        if not "voice_id" in  option:
+            raise Exception(errors["SFV032"])
+        if not "new_send_at" in  option:
+            raise Exception(errors["SFV033"])
+        if not "timezone" in  option:
+            raise Exception(errors["SFV034"])
+
+       
+        if type(option["voice_id"]).__name__ != "int":
+            raise Exception(errors["SFT030"])
+
+        if type(option["new_send_at"]).__name__  != "str" :
+            raise Exception(errors["SFT031"])
+
+        if type(option["timezone"]).__name__  != "str" :
+            raise Exception(errors["SFT020"])
+
+
+            
+        if option["new_send_at"].strip() == "" :
+            raise Exception(errors["SFT032"])
+
+        if option["timezone"].strip() == ""  :
+            raise Exception(errors["SFV021"])
+
+        if not re.match("[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]", option["new_send_at"] ) : 
+            raise Exception(errors['SFV035'])
+            
+        option["new_send_at"] = int(datetime.strptime(option["new_send_at"], "%Y-%m-%d %H:%M:%S").timestamp()) * 1000
+
+
+            
+        
+
+        res= self.__http.put(url= config["bulk-voice/reschedule"], headers={'Authorization' : self.__apiKey}, json = option)
+
+        if callback != None:
+           if type(callback).__name__ == "function":
+                if res["status"] == True:
+                    callback(res, None)
+                else :
+                    callback(None, res)
+    
+    def cancel(self, voice_id, callback = None):
+
+        """
+
+        Cancels scheduled voice call
+
+        Paramaters:
+            voice_id (int): 
+                voice id of the scheduled call
+            callback (function): Optional
+                function to be executed after recieving response 
+
+        """
+        
+        if type(voice_id).__name__ != "int":
+            raise Exception(errors["SFT030"])
+
+        res = self.__http.delete(url = config["baseURL"] + config["bulk-voice/cancelScheduled"] + "/" + str(voice_id), headers={'Authorization' : self.__apiKey})
+        res = res.json()
+        
+        if callback != None:
+           if type(callback).__name__ == "function":
+                if res["status"] == True:
+                    callback(res, None)
+                else :
+                    callback(None, res)
+
+    def send(self, *args):
+
+        """
+        Sends voice call
+        """
+
+        callbackExist = False
+        optionExist = False
+        
+        #Check if the arguments exist
+        if len(args) != 0 :
+
+            if type(args[0]).__name__ == 'dict':
+                options = args[0]
+                optionExist = True
+                self.__requestData = {**self.__requestData,**options}
+            
+            if type(args[-1]).__name__ == 'function':
+                callback = args[-1]
+                callbackExist = True
+
+            #Exceptions
+            if len(args) == 1:
+                if type(args[0]).__name__ != 'function' and type(args[0]).__name__ != 'dict':
+                    raise Exception(errors["SFT004"])
+            
+            if len(args) == 2:
+                if type(args[0]).__name__ != 'dict':
+                    raise Exception(errors["SFT002"])
+                if type(args[-1]).__name__ != 'function':
+                    raise Exception(errors["SFT003"])
+            
+            if len(args) > 2:
+                raise Exception(errors["SFT005"])
+        
+
+        # validate response data
+        self.__validate()
+       
+        # send to server
+        res = self.__http.post(url = config['baseURL'] + config['endpoints']['bulk-voice'], headers={'Authorization' : self.__apiKey}, json = self.__requestData) 
+        self.__requestData = {}
+        if callbackExist:
+            res = res.json()
+            if res["status"] == False :
+                callback(None, res)
+            if res["status"] == True :
+                callback(res, None) 
+
     def __validate(self):
         """
         Helper method to validate the request data 
@@ -245,11 +386,13 @@ class Voice:
             if "repeat" in self.__requestData['config']:
                 if type(self.__requestData['config']['repeat']).__name__ != 'int':
                     raise Exception(errors["SFT022"])
+            
             if "callTransfer" in self.__requestData['config']:
                 if type(self.__requestData['config']['callTransfer']).__name__ != 'dict':
                     raise Exception(errors['SFT023'])
                 if not self.__requestData['config']['callTransfer']:
                     raise Exception(errors['SFV023'])
+                
                 if not "transferKey" in self.__requestData['config']['callTransfer']:
                     raise Exception(errors["SFV024"])
                 if type(self.__requestData['config']['callTransfer']['transferKey']).__name__ != 'int':
@@ -294,151 +437,5 @@ class Voice:
             
             if self.__requestData["audio_file_url"].strip() == "" :
                 raise Exception(errors["SFV031"])
-
-   
-    def text(self,text):
-        """
-        Makes text synthesized call
-
-        Paramters:
-            text (string):
-                text to be synthesized for voice call
-        """
-        self.__requestData = {**self.__requestData,"text":text, "is_text":True}
-        return self
-
-    
-    def audio(self,url):
-        """
-        Makes audio call
-
-        Paramters:
-            url (string):
-                url of the audio file
-        """
-        self.__requestData = {**self.__requestData,"audio_file_url":url, "is_text":False}
-        return self
-
-    
-    def schedule(self,time, timezone):   
-        """ 
-        
-        Schedules a voice call
-    
-        Parameters: 
-            time (string): 
-                Schedule time (in format i.e, yyyy-mm-dd hh:mm:ss) at which the voice call
-            timezone (string):
-                timezone for the time
-    
-        """ 
-        self.__requestData = {**self.__requestData,"time":time, "timezone":timezone}
-        return self
-    
-    
-    def numbers(self,numbers) :
-        """ 
-        
-        Set the list of  numbers for making a voice call
-    
-        Parameters: 
-            numbers (list[string]): 
-                list of numbers you want your voice call to be delivered to
-    
-        """
-        self.__requestData= {**self.__requestData, "numbers":numbers}
-        return self
-    
-    
-    def cancel(self, voice_id, callback = None):
-
-        """
-
-        Cancels scheduled voice call
-
-        Paramaters:
-            voice_id (int): 
-                voice id of the scheduled call
-            callback (function): Optional
-                function to be executed after recieving response 
-
-        """
-        
-        if type(voice_id).__name__ != "int":
-            raise Exception(errors["SFT030"])
-
-        res = self.__http.delete(url = config["baseURL"] + config["bulk-voice/cancelScheduled"] + "/" + str(voice_id), headers={'Authorization' : self.__apiKey})
-        res = res.json()
-        
-        if callback != None:
-           if type(callback).__name__ == "function":
-                if res["status"] == True:
-                    callback(res, None)
-                else :
-                    callback(None, res)
-
-    
-    def reschedule(self, option, callback = None):
-        """
-
-        Reschedules voice call
-
-        Parameters:
-            option (dict): 
-                Dictionary with rescheduling information
-            callback (function): Optional
-                function to be executed after recieving response 
-
-        Required options: 
-            voice_id:
-                voice id of the scheduled call
-            new_send_at:
-                new time to schedule a call
-            timezone:
-                timezone for time
-                
-
-
-        """
-        if type(option).__name__ != "dict":
-            raise Exception()
-
-        if not "voice_id" in  option:
-            raise Exception(errors["SFV032"])
-        if not "new_send_at" in  option:
-            raise Exception(errors["SFV033"])
-        if not "timezone" in  option:
-            raise Exception(errors["SFV034"])
-
-        if type(option["voice_id"]).__name__ != "int":
-            raise Exception(errors["SFT030"])
-
-        if type(option["new_send_at"]).__name__  != "str" :
-            raise Exception(errors["SFT031"])
-            
-        if option["new_send_at"].strip() == "" :
-            raise Exception(errors["SFT032"])
-
-        if not re.match("[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]", option["new_send_at"] ) : 
-            raise Exception(errors['SFV035'])
-            
-        option["new_send_at"] = int(datetime.strptime(option["new_send_at"], "%Y-%m-%d %H:%M:%S").timestamp()) * 1000
-
-        if type(option["timezone"]).__name__  != "str" :
-            raise Exception(errors["SFT020"])
-            
-        if option["timezone"].strip() == ""  :
-            raise Exception(errors["SFV021"])
-
-        res= self.__http.put(url= config["bulk-voice/reschedule"], headers={'Authorization' : self.__apiKey}, json = option)
-
-        if callback != None:
-           if type(callback).__name__ == "function":
-                if res["status"] == True:
-                    callback(res, None)
-                else :
-                    callback(None, res)
-   
-    
 
     
